@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.example.obentalha.craftandroid.api.Retrofit
 import com.example.obentalha.craftandroid.api.model.User
 import com.example.obentalha.craftandroid.api.service.UserServiceImpl
+import com.example.obentalha.craftandroid.model.UserUI
 import com.example.obentalha.craftandroid.viewmodel.MainViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -34,18 +35,28 @@ class MainActivity : Activity() {
 
 //        var mainViewModel = MainViewModel()
 
-        disposable.add(mainViewModel.fetchUsers(UserServiceImpl(Retrofit.getUsersService()))
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe { users: List<User>?, throwable: Throwable? ->
-                    if(users != null && users.isNotEmpty()){
-                        var userOne = users[0]
-                        findViewById<TextView>(R.id.firstname).text = userOne.username
-                        findViewById<TextView>(R.id.lastname).text = userOne.name
-                        findViewById<TextView>(R.id.dateOfBirth).text = userOne.email
-                        findViewById<TextView>(R.id.address).text = userOne.address.city
-                    }
+//        disposable.add(mainViewModel.fetchUsers()
+//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+//                .subscribe { users: List<User>?, throwable: Throwable? ->
+//                    if(users != null && users.isNotEmpty()){
+//                        var userOne = users[0]
+//                        findViewById<TextView>(R.id.firstname).text = userOne.username
+//                        findViewById<TextView>(R.id.lastname).text = userOne.name
+//                        findViewById<TextView>(R.id.dateOfBirth).text = userOne.email
+//                        findViewById<TextView>(R.id.address).text = userOne.address.city
+//                    }
+//                }
+//        )
+
+        val fetchFirstUserDisposable = mainViewModel.fetchFirstUser().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe { user: UserUI?, throwable: Throwable? ->
+                        if(user != null ){
+                            findViewById<TextView>(R.id.firstname).text = user.firstname
+                            findViewById<TextView>(R.id.lastname).text = user.lastname
+                        }
                 }
-        )
+
+        disposable.add(fetchFirstUserDisposable)
 
     }
 
