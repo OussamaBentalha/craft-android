@@ -33,21 +33,6 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
 
-//        var mainViewModel = MainViewModel()
-
-//        disposable.add(mainViewModel.fetchUsers()
-//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribe { users: List<User>?, throwable: Throwable? ->
-//                    if(users != null && users.isNotEmpty()){
-//                        var userOne = users[0]
-//                        findViewById<TextView>(R.id.firstname).text = userOne.username
-//                        findViewById<TextView>(R.id.lastname).text = userOne.name
-//                        findViewById<TextView>(R.id.dateOfBirth).text = userOne.email
-//                        findViewById<TextView>(R.id.address).text = userOne.address.city
-//                    }
-//                }
-//        )
-
         val fetchFirstUserDisposable = mainViewModel.fetchFirstUser().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe { user: UserUI?, throwable: Throwable? ->
                         if(user != null ){
@@ -57,7 +42,6 @@ class MainActivity : Activity() {
                 }
 
         disposable.add(fetchFirstUserDisposable)
-
     }
 
     override fun onDestroy() {

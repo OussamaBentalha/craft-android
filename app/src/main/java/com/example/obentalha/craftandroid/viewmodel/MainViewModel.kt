@@ -25,7 +25,6 @@ class MainViewModel(private var userServiceImpl: UserServiceImpl) {
                         Single.error(Throwable())
                     }
                 }
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
 
 
