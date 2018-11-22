@@ -23,11 +23,17 @@ class MainActivity : Activity() {
     @Inject
     lateinit var mainViewModel: MainViewModel
 
+    private var firstnameTV: TextView? = null
+    private var lastnameTV: TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         (application as MainApplication).getAppComponents().inject(this)
+
+        firstnameTV = findViewById<TextView>(R.id.firstname)
+        lastnameTV = findViewById<TextView>(R.id.lastname)
     }
 
     override fun onResume() {
@@ -36,16 +42,16 @@ class MainActivity : Activity() {
         val fetchFirstUserDisposable = mainViewModel.fetchFirstUser().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe { user: UserUI?, throwable: Throwable? ->
                         if(user != null ){
-                            findViewById<TextView>(R.id.firstname).text = user.firstname
-                            findViewById<TextView>(R.id.lastname).text = user.lastname
+                            firstnameTV?.text = user.firstname
+                            lastnameTV?.text = user.lastname
                         }
                 }
 
         disposable.add(fetchFirstUserDisposable)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onPause() {
+        super.onPause()
         disposable.clear()
     }
 

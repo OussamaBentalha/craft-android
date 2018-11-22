@@ -69,7 +69,7 @@ class MainViewModelTest {
 
     @Test
     fun getError() {
-        Mockito.`when`(userServiceImpl.getUsers()).thenReturn(null)
+        Mockito.`when`(userServiceImpl.getUsers()).thenReturn(Single.just(arrayListOf()))
 
         testObserver = mainViewModel.fetchFirstUser().test()
         testObserver.assertError(Throwable::class.java)

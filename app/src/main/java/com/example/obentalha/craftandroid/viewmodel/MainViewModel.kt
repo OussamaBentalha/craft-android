@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by Oussama BENTALHA on 09/10/2018.
  */
-class MainViewModel(private var userServiceImpl: UserServiceImpl) {
+class MainViewModel(private val userServiceImpl: UserServiceImpl) {
 
     fun fetchUsers(): Single<List<User>> {
         return userServiceImpl.getUsers()
@@ -19,7 +19,7 @@ class MainViewModel(private var userServiceImpl: UserServiceImpl) {
     fun fetchFirstUser(): Single<UserUI> {
         return userServiceImpl.getUsers()
                 .flatMap {
-                    if (it.isNotEmpty()) {
+                    if (it!=null && it.isNotEmpty()) {
                         Single.just(convertToUserUI(it[0]))
                     } else {
                         Single.error(Throwable())
